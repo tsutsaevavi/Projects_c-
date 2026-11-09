@@ -1,29 +1,34 @@
 #include<iostream>
 using namespace std;
-class Engine {
+class Gyroscope {
 private:
-	double thrust; // тяга (Н)
-	double fuelFlow; // расход топлива (кг/с)
+	double angularVelocity;
+	bool calibrationRequired;
 public:
-	Engine(double T, double F)
-	:thrust(T), fuelFlow(F){}
-	//геттер для signalStrengt
-	double  getSpecificImpulse() const{
-		if ( fuelFlow <= 0){
-			return 0;
+	Gyroscope(double V, double C)
+		:angularVelocity(V), calibrationRequired(C) {}
+	void calibrate() { //сброс флага калибровки
+		calibrationRequired = false;
+	
+
+	}
+	void printStatus() const{// вывод текущего состояния
+		std::setlocale(LC_ALL, "Russian");
+		if (calibrationRequired) {
+			cout << "Калибровка требуется | " << angularVelocity << endl;
 		}
-			return thrust/(fuelFlow*9.81);
-			}
-	void printInfo() const{
-		cout << "Тяга: " << thrust << " Н, "
-		             << "Расход топлива: " << fuelFlow << " кг/с, "
-		             << "Удельный импульс: " << getSpecificImpulse() << " с" << endl;
+		else {
+			cout << "Калибровка не требуется | " << angularVelocity << endl;
+		}
+	
 	}
 
 };
+ 
 int main() {
-    Engine e1(5000, 2.5);
-    e1.printInfo();
+	Gyroscope g1(120.5, true);
+	g1.printStatus();
+	g1.calibrate();
+		g1.printStatus();
 
-    return 0;
 }
